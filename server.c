@@ -8,14 +8,29 @@
 char conf[500];
 void echo(int connfd);
 void *thread(void *vargp);
+char* portOpt, docRootOpt;
+char** contentOpt, dirOpt;
 
 void get_conf() {
     FILE *conffile;
     conffile = fopen ("ws.conf", "r");
-    int index = 0;
     while (fgets (conf , 500, conffile)) {
-        index++;
-        printf("%d. %s",index, conf);
+        //Remove comments and whitespace
+        if((strncmp(conf, "#", 1) == 0)||(strncmp(conf, "\n", 1) == 0)) continue;
+
+        //Process options
+        char *token;
+        char separator[2] = " ";
+        
+        token = strtok(conf, separator);
+
+        while( token != NULL){
+            printf( " %s\n", token);
+
+            token = strtok(NULL, separator);
+        }
+
+        //printf("%d. %s",index, conf);
     }
         //if (strcmp (conf, "") == 0){
         //        fgets (dir, 500, conffile);
