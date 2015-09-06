@@ -11,25 +11,60 @@ void *thread(void *vargp);
 char* portOpt, docRootOpt;
 char** contentOpt, dirOpt;
 
+void parse_option(char* line, char* target, char** option) {
+    char *token;
+    char separator[2] = " ";
+
+    token = strtok(line, separator);
+    printf("TOKEN: %s\n", token);
+    printf("TARGET: %s\n", target);
+
+    while( token != NULL ) {
+        if(strcmp(token, target) == 0) {
+            token = strtok(NULL, separator);
+            printf("TOKEN2: %s\n", token); 
+            while (token != NULL) {
+                portOpt = token;
+                token = strtok(NULL, separator);
+            }
+            break;
+        }
+        token = strtok(NULL, separator);
+    }
+}
+
 void get_conf() {
     FILE *conffile;
     conffile = fopen ("ws.conf", "r");
     while (fgets (conf , 500, conffile)) {
         //Remove comments and whitespace
         if((strncmp(conf, "#", 1) == 0)||(strncmp(conf, "\n", 1) == 0)) continue;
-
+        
+        parse_option(conf, "Listen", portOpt);
+        /*
         //Process options
         char *token;
         char separator[2] = " ";
         
         token = strtok(conf, separator);
-
+        
         while( token != NULL){
+            if(strcmp(token, "Listen") == 0) {
+                token = strtok(NULL, separator);
+                while (token != NULL) {
+                    portOpt = token;
+                    token = strtok(NULL, separator);
+                }
+                printf(" PORT OPT: %s\n", portOpt);
+                break;
+            }
             printf( " %s\n", token);
 
             token = strtok(NULL, separator);
         }
+        */
 
+        printf(" PORT OPT: %s\n", portOpt);
         //printf("%d. %s",index, conf);
     }
         //if (strcmp (conf, "") == 0){
